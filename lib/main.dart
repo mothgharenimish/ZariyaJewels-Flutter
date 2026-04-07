@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zariyajewllery/screen/splash.dart';
+import 'package:zariyajewllery/screen/splash/splash.dart';
 
 void main() {
   runApp(const MyApp());
