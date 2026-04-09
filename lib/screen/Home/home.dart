@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:zariyajewllery/model/jewllerydata_model.dart';
+import 'package:zariyajewllery/screen/Home/categorycard.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -23,9 +25,38 @@ class _HomeState extends State<Home> {
 
   }
 
-  void getHttp() async {
-    final response = await dio.get('https://jewellerydata.infinityfreeapp.com/jewlleryread.php');
-    print("The response is $response");
+  List<Datum> jewelleryList = [];
+  List<String> categoryList = [];
+
+  Future<void> getHttp() async {
+    try {
+      final response = await dio.get(
+        'http://192.168.1.9:8080/myproject/JewelleryPAPI/fetch_jewellery.php',
+      );
+
+      print(response);
+
+      JewelleryData model = JewelleryData.fromJson(response.data);
+
+      print("Status: ${model.status}");
+      print("Total items: ${model.data.length}");
+      print("The model is: $model");
+
+      setState(() {
+        jewelleryList = model.data;
+        categoryList = jewelleryList
+            .map((item) => item.jewllerycategory.trim())
+            .toSet()
+            .toList();
+
+        print("Duplicate remove from the category List");
+        print(categoryList);
+      });
+
+      print(jewelleryList[0].jewlleryname);
+    } catch (e) {
+      print("API Error: $e");
+    }
   }
 
 
@@ -182,8 +213,27 @@ class _HomeState extends State<Home> {
                 ),
 
               ),
-            )
+            ),
 
+            Padding(
+              padding: const EdgeInsets.only(top: 25,left: 16,right: 16),
+              child: SizedBox(
+                height: 50,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: categoryList.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Categorycard(
+                        category: categoryList[index],
+                        isSelected: index == 0,
+                      ),
+                    );
+                  },
+                ),
+              )
+            )
           ],
         ),
       ),

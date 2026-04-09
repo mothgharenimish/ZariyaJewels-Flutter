@@ -1,35 +1,31 @@
 import 'dart:convert';
 
-Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
+JewelleryData jewelleryDataFromJson(String str) => JewelleryData.fromJson(json.decode(str));
 
-String welcomeToJson(Welcome data) => json.encode(data.toJson());
+String jewelleryDataToJson(JewelleryData data) => json.encode(data.toJson());
 
-class Welcome {
+class JewelleryData {
   bool status;
-  String message;
   List<Datum> data;
 
-  Welcome({
+  JewelleryData({
     required this.status,
-    required this.message,
     required this.data,
   });
 
-  factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
+  factory JewelleryData.fromJson(Map<String, dynamic> json) => JewelleryData(
     status: json["status"],
-    message: json["message"],
     data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "message": message,
     "data": List<dynamic>.from(data.map((x) => x.toJson())),
   };
 }
 
 class Datum {
-  int id;
+  String id;
   String jewlleryname;
   String jewlleryprice;
   String jewllerydescription;
