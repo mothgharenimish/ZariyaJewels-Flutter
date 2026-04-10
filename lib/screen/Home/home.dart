@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:zariyajewllery/model/jewllerydata_model.dart';
 import 'package:zariyajewllery/screen/Home/categorycard.dart';
+import 'package:zariyajewllery/screen/Home/jewellerycard.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -27,11 +28,12 @@ class _HomeState extends State<Home> {
 
   List<Datum> jewelleryList = [];
   List<String> categoryList = [];
+  String selectedCategory = "All";
 
   Future<void> getHttp() async {
     try {
       final response = await dio.get(
-        'http://192.168.1.9:8080/myproject/JewelleryPAPI/fetch_jewellery.php',
+        'http://192.168.1.6:8080/myproject/JewelleryPAPI/fetch_jewellery.php',
       );
 
       print(response);
@@ -49,6 +51,8 @@ class _HomeState extends State<Home> {
             .toSet()
             .toList();
 
+        categoryList.insert(0, "All");
+
         print("Duplicate remove from the category List");
         print(categoryList);
       });
@@ -60,9 +64,30 @@ class _HomeState extends State<Home> {
   }
 
 
+  List<Datum> searchcode(List<Datum> list) {
+    if (_searchController.text.trim().isEmpty) {
+      return list;
+    }
+
+    return list.where((item) {
+      return item.jewlleryname
+          .toLowerCase()
+          .contains(_searchController.text.toLowerCase());
+    }).toList();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
+
+    List<Datum> filteredList = selectedCategory == "All"
+        ? jewelleryList
+        : jewelleryList.where((item) =>
+    item.jewllerycategory.trim() == selectedCategory).toList();
+
+    List<Datum> finalList = searchcode(filteredList);
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -193,6 +218,11 @@ class _HomeState extends State<Home> {
                        Expanded(
                          child: TextFormField(
                            controller: _searchController,
+                           onChanged: (value) {
+                             setState(() {
+
+                             });
+                           },
                            keyboardType: TextInputType.name,
                            decoration: InputDecoration(
                              hintText: "Search Jewllery Products",
@@ -223,17 +253,45 @@ class _HomeState extends State<Home> {
                   scrollDirection: Axis.horizontal,
                   itemCount: categoryList.length,
                   itemBuilder: (context, index) {
+                    final category = categoryList[index];
+                    print("The category is $category");
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Categorycard(
-                        category: categoryList[index],
-                        isSelected: index == 0,
+                      child: GestureDetector(
+                        onTap: (){
+                          setState(() {
+                            selectedCategory = category;
+                          });
+                        },
+                        child: Categorycard(
+                          category: categoryList[index],
+                          isSelected: selectedCategory == category,
+                        ),
                       ),
                     );
                   },
                 ),
               )
+            ),
+            SizedBox(height: 15),
+            Expanded(
+              child: GridView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: finalList.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 0.72,
+                ),
+                itemBuilder: (context, index) {
+                  return JewelleryCard(
+                    item: finalList[index],
+                  );
+                },
+              ),
             )
+
           ],
         ),
       ),
