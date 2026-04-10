@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:zariyajewllery/model/jewllerydata_model.dart';
 import 'package:zariyajewllery/screen/Home/categorycard.dart';
+import 'package:zariyajewllery/screen/Home/customalert.dart';
 import 'package:zariyajewllery/screen/Home/jewellerycard.dart';
 
 class Home extends StatefulWidget {
@@ -150,13 +151,30 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           SizedBox(width: 4),
-                          CircleAvatar(
-                            radius: 18,
-                            backgroundColor: const Color(0xFF000000).withValues(alpha: 0.10),
-                            child: Image.asset(
-                              "assets/images/iconamoon_scanner-light.png",
-                              height: 26 ,
-                              width: 26,
+                          InkWell(
+                            onTap: () {
+                              print("Click on the Scanner");
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Customalert(onGalleryClick: onGalleryClick, onCameraClick: onCameraClick),
+
+                                  );
+                                },
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 18,
+                              backgroundColor: const Color(0xFF000000).withValues(alpha: 0.10),
+                              child: Image.asset(
+                                "assets/images/iconamoon_scanner-light.png",
+                                height: 26 ,
+                                width: 26,
+                              ),
                             ),
                           ),
                         ],
