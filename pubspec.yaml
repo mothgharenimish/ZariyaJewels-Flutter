@@ -35,6 +35,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   dio: ^5.9.2
+  image_picker: ^1.1.2
+  path_provider: ^2.1.5
+  tflite_flutter: ^0.12.1
+  image: ^4.1.7
+
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +66,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
    - assets/images/
+   - assets/nasnet_image_classifiers.tflite
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

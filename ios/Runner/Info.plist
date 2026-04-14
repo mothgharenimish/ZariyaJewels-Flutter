@@ -45,5 +45,12 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+    <!-- ✅ Camera Permission -->
+        <key>NSCameraUsageDescription</key>
+        <string>This app needs camera access to capture student photo.</string>
+
+        <!-- ✅ Gallery Permission -->
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>This app needs photo library access to select student photo.</string>
 </dict>
 </plist>
